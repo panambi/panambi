@@ -38,10 +38,10 @@ Me encontre no [LinkedIn](https://www.linkedin.com/in/panambi/) ou envie uma est
 Do ventre das águas profundas, nasci com o nome do mar.  
 Das margens dos rios, carrego memórias que dançam com o vento.  
    
-Adriana: mulher de profundezas, silêncio fértil e correnteza firme.  
+> Adriana: mulher de profundezas, silêncio fértil e correnteza firme.  
 Panambi: borboleta do tempo, que rompe casulos e renasce em cor.  
 
-Em mim, os ciclos se encontram.  
+> Em mim, os ciclos se encontram.  
 Fluo como rio, voo como sonho.  
 Carrego a coragem da travessia  
 e o brilho das asas que se abrem em direção ao porvir.
