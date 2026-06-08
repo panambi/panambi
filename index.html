@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Reels — Adriana</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F4EF;--surface:#fff;--surface2:#F0EDE7;--border:#E2DDD6;
+  --text:#1C1917;--text2:#6B6560;--text3:#A09890;
+  --accent:#2D5A3D;--accent-l:#EAF2ED;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:var(--accent);padding:2rem 1.5rem 1.75rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px}
+.header h1{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:#fff;line-height:1.25;margin-bottom:6px}
+.header p{font-size:13px;color:rgba(255,255,255,.6);font-weight:300;line-height:1.5}
+.pill-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pill-bar span{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)}
+.main{padding:1.5rem 1.25rem 3rem;max-width:680px;margin:0 auto}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.tab{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s}
+.tab:hover{background:var(--surface2)}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1rem}
+.clabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);font-weight:500;margin-bottom:10px}
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:500;margin-bottom:10px;background:var(--accent-l);color:var(--accent)}
+.stitle{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;color:var(--text);margin-bottom:12px;font-style:italic}
+.mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mfull{grid-column:1/-1}
+.mlabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:4px;font-weight:500}
+.mval{font-size:13px;color:var(--text2);line-height:1.55}
+.neural{background:#F0EDFF;border:1px solid #C4BBFF;border-radius:10px;padding:10px 14px;margin-top:12px}
+.neural-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#4B3FA0;font-weight:600;margin-bottom:4px}
+.neural-val{font-size:12.5px;color:#2D2060;line-height:1.5}
+.hook-pill{background:#FEF3C7;border:1px solid #FDE68A;border-radius:10px;padding:10px 14px;margin-top:10px}
+.hook-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#92400E;font-weight:600;margin-bottom:5px}
+.hook-text{font-size:14px;color:#1C1917;font-weight:500;line-height:1.45;font-family:'Playfair Display',serif;font-style:italic}
+.proof{background:#E8F5E9;border:1px solid #A5D6A7;border-radius:10px;padding:9px 13px;margin-top:10px;font-size:12px;color:#1B5E20;line-height:1.5}
+.alert{background:#FFF8E7;border:1px solid #F5C842;border-radius:10px;padding:9px 13px;margin-top:8px;font-size:12px;color:#7A5C00;line-height:1.5}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.badge{font-size:11px;padding:2px 9px;border-radius:20px;border:1px solid var(--border);color:var(--text2);background:var(--surface2)}
+.tlabel{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.tsub{font-size:12.5px;color:var(--text3);margin-bottom:12px;line-height:1.5}
+textarea{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--surface2);resize:none;line-height:1.55;transition:border-color .15s}
+textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+textarea::placeholder{color:var(--text3)}
+.pbox{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;font-size:13px;color:var(--text);line-height:1.85;white-space:pre-wrap;font-family:'DM Sans',sans-serif;font-weight:300;max-height:420px;overflow-y:auto}
+.hi{background:#FEF3C7;color:#92400E;border-radius:3px;padding:1px 4px;font-weight:500}
+.cbtn{margin-top:1rem;width:100%;padding:11px;border:none;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s}
+.cbtn:hover{background:#234832}
+.cbtn:active{transform:scale(.98)}
+.cbtn:disabled{background:var(--surface2);color:var(--text3);cursor:not-allowed;border:1px solid var(--border)}
+.pbox::-webkit-scrollbar{width:4px}
+.pbox::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+@media(max-width:480px){.mrow{grid-template-columns:1fr}.mfull{grid-column:1}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="hl">Adriana Panambi · @adrianapanambi</div>
+  <h1>Prompt Reels<br>Comunicação Emocional</h1>
+  <p>Comunicar-se consigo primeiro — antes de comunicar ao outro</p>
+  <div class="pill-bar">
+    <span>⏱ máx 45 segundos</span>
+    <span>🔍 pesquisa obrigatória</span>
+    <span>📲 texto no frame 1</span>
+    <span>🧠 Lisa Cron</span>
+    <span>📊 dados reais</span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="tabs" id="tabs"></div>
+  <div id="strategy"></div>
+  <div class="card">
+    <div class="tlabel">Sobre o que você quer falar nesse vídeo?</div>
+    <div class="tsub">Escreva o tema, uma situação, uma emoção ou uma ideia. O prompt pesquisa, monta e entrega o roteiro completo.</div>
+    <textarea id="theme" rows="2" placeholder="Ex: medo de decepcionar quem eu amo, dificuldade de pedir ajuda, silêncio como forma de punição..." oninput="renderPrompt()"></textarea>
+  </div>
+  <div class="card">
+    <div class="clabel">Prompt pronto — cole no Claude (busca ativada) ou ChatGPT</div>
+    <div class="pbox" id="pbox"></div>
+    <button class="cbtn" id="cbtn" onclick="copyPrompt()">Escreva o tema para liberar o prompt</button>
+  </div>
+</div>
+
+<script>
+const SEARCH_BLOCK = `
+━━━ PESQUISA OBRIGATÓRIA — EXECUTE ANTES DE ESCREVER UMA LINHA ━━━
+Não pule. O roteiro precisa estar vivo, ancorado no agora. Faça as 3 buscas abaixo e sintetize o que encontrou antes de começar.
+
+Busca 1 — Clima emocional do momento:
+Pesquise: "o que as mulheres brasileiras estão sentindo semana [data atual] 2026 autoconhecimento desenvolvimento pessoal"
+→ Qual emoção coletiva está em circulação agora? (esgotamento, autocobrança, transição, medo, esperança?) Use isso para calibrar o tom do vídeo.
+
+Busca 2 — Tendência ativa no nicho:
+Pesquise: "reels desenvolvimento pessoal autoconhecimento comunicação instagram trending [mês atual] 2026 brasil"
+→ Qual enquadramento de tema está performando agora? O roteiro precisa estar alinhado com o que está sendo consumido hoje, não há 3 meses.
+
+Busca 3 — Dado ou observação recente sobre o tema:
+Pesquise: "[TEMA] psicologia comportamento autoconhecimento pesquisa 2025 2026"
+→ Encontre um dado real, estudo ou insight que torne o roteiro mais sólido. Não citar a fonte no vídeo — usar para fundamentar a fala.
+
+Síntese das 3 buscas (escreva 2–3 linhas antes do roteiro):
+"Encontrei que [clima emocional do momento] + [tendência ativa] + [dado relevante sobre o tema]. O roteiro vai usar isso assim: [como vai aparecer no vídeo]."
+`;
+
+const RULES_BLOCK = `
+━━━ REGRAS ABSOLUTAS — SEM EXCEÇÃO ━━━
+1. DURAÇÃO: máximo 45 segundos de fala. Equivale a 110–120 palavras faladas. Conte e corte se passar.
+2. FRAME 1: a primeira frase do gancho aparece na tela ANTES de ela começar a falar. Entregar como [LEGENDA FRAME 1: "..."].
+3. HOOK: os primeiros 2 segundos são diagnóstico — a pessoa se reconhece antes de terminar de ler. Não é pergunta. Não é conclusão genérica. É espelho preciso.
+4. PIVÔ OBRIGATÓRIO: em algum momento do corpo, a fala vira com "não era sobre [X] — era [Y]". Esse é o momento de maior retenção. Sinalizar com [PIVÔ].
+5. FRASE CITÁVEL: uma frase curta e forte que funciona sozinha fora do vídeo — exportável, memorável, que a pessoa salva na galeria ou envia no DM. Sinalizar com [CITÁVEL].
+6. CTA: sempre compartilhamento. Nunca pedir curtida. Nunca pedir follow. Estrutura: "Manda pra [quem]. Sem [texto/mensagem]. [Ela vai entender / O vídeo já diz]."
+7. PRIMEIRA PESSOA FEMININA o tempo todo.
+8. PROIBIDO: "autoconhecimento", "jornada", "processo", "ressignificar", "gatilho", "lugar de fala". Substituir por linguagem oral e concreta.
+9. SOAR COMO FALA: frases curtas intercaladas com frases mais longas. Imperfeito, vivo, presente.
+10. TEMA CENTRAL DE TODOS OS DIAS: comunicar-se consigo mesma primeiro — a verdade interna precede a comunicação externa.
+`;
+
+const days = [
+
+// ─── SEGUNDA ───────────────────────────────────────────────────────
+{
+label:"Segunda",
+tag:"Hoje eu entendi",
+strategy:"Insight ancorado no dia — pequeno momento, verdade grande",
+hook_type:"Diagnóstico no dia: 'Hoje eu entendi que...' — presente, vivo, real",
+energy:"Introspectiva · suave · como um diário falado em voz alta",
+cta:"Manda pra quem precisa ouvir isso agora · sem texto · ela vai entender",
+neural:"Gatilho 3 + Gatilho 4 (Lisa Cron): emoção antes da lógica + neurônios-espelho. Segunda tem alto consumo introspectivo — pessoa processando o fim de semana. Hook de dia ancorado cria presença imediata.",
+hook:"Hoje eu entendi que eu sempre soube o que precisava. Só não tinha me dado permissão.",
+proof:"✅ Estrutura comprovada — Reel 1 (1.942 views, 29 saves): 'Hoje eu entendi que eu sempre soube como queria comemorar, só não tinha me dado permissão.'",
+alert:"Segunda: alto consumo introspectivo. Pessoa em modo de sentir. Narrativa de permissão e autoconhecimento performa melhor que provocação.",
+badges:["saves","replay","introspectivo","permissão"],
+body:`PERSONA: Você é roteirista de Reels para Adriana — mulher brasileira, criadora de conteúdo sobre comunicação emocional e desenvolvimento pessoal. O eixo central é: comunicar-se consigo mesma primeiro, antes de comunicar ao outro. Voz oral, pausada, reflexiva. Primeira pessoa feminina sempre.
+
+TEMA DO VÍDEO: [TEMA]
+
+[SEARCH_BLOCK]
+
+━━━ ESTRATÉGIA: HOJE EU ENTENDI ━━━
+Estrutura comprovada pelos dados reais do perfil. Reel com maior número de views (1.942) e salvamentos (29) usou exatamente esse hook e essa estrutura.
+O insight é ancorado no dia — presente, acontecendo agora. Uma situação pequena e cotidiana revela uma verdade interna grande. A pessoa assiste porque reconhece a cena antes de reconhecer a lição.
+
+[RULES_BLOCK]
+
+━━━ GANCHO — 0 a 2 segundos ━━━
+[LEGENDA FRAME 1: aparece na tela antes de ela falar]
+Formato obrigatório: "Hoje eu entendi que [verdade interna que a pessoa carregava mas não se permitia ver]."
+— Máximo 12 palavras.
+— A verdade precisa ser sobre a relação consigo mesma — não com o outro.
+— Referência de nível: "Hoje eu entendi que eu sempre soube o que precisava. Só não tinha me dado permissão."
+— Adapte ao tema. Mantenha a estrutura "Hoje eu entendi que...".
+
+━━━ CORPO — até 45 segundos / 110–120 palavras ━━━
+1. Situação cotidiana pequena e concreta (2 frases — crie uma cena real: café, biscoito, caminhada, espelho, mensagem não enviada)
+2. O que ela esperava que fosse acontecer — a versão automática
+3. [PIVÔ] "Não era sobre [situação]. Era que [verdade interna]." — virada obrigatória
+4. O que essa virada revelou sobre comunicar-se consigo mesma
+5. [CITÁVEL] Frase curta e forte que sintetiza tudo — máximo 10 palavras
+6. Encerramento suave — deixar uma camada aberta, não fechar tudo
+
+Pausas: marcar com [pausa] onde a fala para.
+
+━━━ CTA — últimas 3 segundos ━━━
+"Se isso fez você pensar em alguém, manda agora. Sem texto. Ela vai entender."
+
+Entregue na ordem: síntese das buscas → [LEGENDA FRAME 1] → roteiro completo com marcadores → contagem de palavras.`
+},
+
+// ─── TERÇA ─────────────────────────────────────────────────────────
+{
+label:"Terça",
+tag:"Era o contrário",
+strategy:"Inversão de crença — fez mais do errado esperando resultado diferente",
+hook_type:"'Eu achava que... Era o contrário.' — quebra a previsão do cérebro",
+energy:"Direta · firme · como quem descobriu algo e precisa contar",
+cta:"Manda pra quem está travada fazendo mais do que não funciona",
+neural:"Gatilho 1 + Gatilho 5 (Lisa Cron): expectativa + conflito interno. O cérebro odeia tensão não resolvida. A inversão cria conflito cognitivo que só resolve ao chegar no final. Terça tem alto volume de comentários — conteúdo de inversão provoca resposta.",
+hook:"Eu achava que o problema era não fazer o suficiente. Era o contrário.",
+proof:"✅ Estrutura comprovada — Reel 3 (34 saves, 14 shares, 8 conversões de seguidores): 'Eu achava que o problema era não fazer o suficiente. Era o contrário.' — maior conversão de seguidores dos 3 reels analisados.",
+alert:"Terça: dia de maior conversão de seguidores quando o conteúdo tem framework (frase citável curta). A pessoa compartilha porque quer que a outra entenda algo que ela acabou de entender.",
+badges:["seguidores","framework citável","inversão","shares"],
+body:`PERSONA: Você é roteirista de Reels para Adriana — mulher brasileira, criadora de conteúdo sobre comunicação emocional e desenvolvimento pessoal. O eixo central: comunicar-se consigo mesma primeiro. Presença direta, firme, sem hesitação. Primeira pessoa feminina sempre.
+
+TEMA DO VÍDEO: [TEMA]
+
+[SEARCH_BLOCK]
+
+━━━ ESTRATÉGIA: ERA O CONTRÁRIO ━━━
+Estrutura comprovada pelos dados: maior conversão de seguidores (8 perfis), maior número de saves (34) e shares (14) vieram do Reel com esse exato formato de inversão.
+A pessoa fazia mais do errado — achava que o problema era quantidade, esforço, movimento. A revelação: o problema era interno, não externo. Sempre.
+
+[RULES_BLOCK]
+
+━━━ GANCHO — 0 a 2 segundos ━━━
+[LEGENDA FRAME 1: aparece na tela antes de ela falar]
+Formato obrigatório — duas frases curtas que se tensionam:
+Frase 1: "Eu achava que o problema era [o que parecia óbvio e externo]."
+Frase 2: "Era o contrário." (ou: "Não era.")
+— Total: máximo 12 palavras nas duas frases.
+— Referência de nível: "Eu achava que o problema era não fazer o suficiente. Era o contrário."
+— Adapte ao tema. A estrutura de inversão é obrigatória.
+
+━━━ CORPO — até 45 segundos / 110–120 palavras ━━━
+1. O padrão: o que ela fazia repetidamente achando que era a solução (2 frases — concreto, cotidiano)
+2. Escalada: ela fazia mais — e nada mudava
+3. [PIVÔ] "Não era sobre [ação externa]. Era [estado interno / relação consigo mesma]."
+4. O que descobriu sobre si mesma quando parou de fazer mais e começou a se ouvir
+5. [CITÁVEL] Framework curto — máximo 8 palavras. Precisa funcionar como frase de tela, print, tattoo mental.
+6. Encerramento com pergunta indireta — não respondida
+
+Pausas: marcar com [pausa].
+
+━━━ CTA — últimas 3 segundos ━━━
+"Manda isso pra quem você sente que está fazendo mais do que não está funcionando. Sem mensagem. O vídeo já diz tudo."
+
+Entregue: síntese das buscas → [LEGENDA FRAME 1] → roteiro completo com marcadores → contagem de palavras.`
+},
+
+// ─── QUARTA ────────────────────────────────────────────────────────
+{
+label:"Quarta",
+tag:"Plot Twist",
+strategy:"A história vai para um lugar — e vira outro completamente",
+hook_type:"Conclusão que choca — o caminho só aparece no final",
+energy:"Narrativa crescente · virada · silêncio",
+cta:"Manda pra quem viveu isso · sem texto · o vídeo já diz",
+neural:"Gatilho 1 + Gatilho 5 (Lisa Cron): expectativa + conflito interno. Plot twist libera dopamina e força replay. Quarta é pico de consumo de Reels. Recurso de ECO (frase que volta transformada) é o gatilho de replay mais poderoso do formato.",
+hook:"Eu fui embora achando que era sensível demais. Levei anos pra entender que era o ambiente errado.",
+proof:"✅ Estrutura alinhada ao Reel 3 — 'Era o contrário' é plot twist interno. Quarta é pico de consumo semanal de Reels no Instagram. Maior potencial de viralização da semana.",
+alert:"Quarta: pico de consumo. O ECO é obrigatório — frase que abre o vídeo volta no final com significado invertido. Isso força replay automático e aumenta tempo de consumo medido pelo algoritmo.",
+badges:["viral","replay","DM","plot twist","pico de consumo"],
+body:`PERSONA: Você é roteirista de Reels para Adriana — mulher brasileira, criadora de conteúdo sobre comunicação emocional e desenvolvimento pessoal. Eixo central: a verdade que a gente conta pra si mesma antes de contar ao outro. Presença narrativa forte. Primeira pessoa feminina sempre.
+
+TEMA DO VÍDEO: [TEMA]
+
+[SEARCH_BLOCK]
+
+━━━ ESTRATÉGIA: PLOT TWIST ━━━
+Quarta é o pico de consumo de Reels na semana. O plot twist quebra a previsão do cérebro — libera dopamina e força replay. O recurso de ECO (frase que abre o vídeo voltando no final com significado completamente diferente) é o gatilho de replay mais eficaz do formato curto.
+Tema sempre: o que ela achava sobre si mesma — e o que era de verdade.
+
+[RULES_BLOCK]
+
+━━━ GANCHO — 0 a 2 segundos ━━━
+[LEGENDA FRAME 1: aparece na tela antes de ela falar]
+Formato: entrega a conclusão, esconde o caminho.
+Estrutura: "Eu [ação/decisão tomada]. Levei [tempo] pra entender que [virada — o contrário do esperado]."
+— Máximo 12 palavras.
+— O espectador não sabe como chegou nisso — precisa assistir até o fim.
+— [ECO INÍCIO]: marcar essa frase — ela vai voltar transformada no final.
+— Referência de nível: "Eu fui embora achando que era sensível demais. Levei anos pra entender que era o ambiente errado."
+
+━━━ CORPO — até 45 segundos / 110–120 palavras ━━━
+1. Cena inicial: como a situação parecia ser — a versão que ela acreditava (concreto, 2 frases)
+2. Ela age com base nessa versão — algo não encaixa mas ela ignora
+3. [pausa dramática] — 2 segundos antes da virada
+4. [PIVÔ] A percepção que muda tudo — sempre sobre comunicação interna, não externa
+5. [CITÁVEL] Frase curta que sintetiza a virada — exportável, memorável
+6. [ECO FINAL] A frase do gancho volta — com significado completamente diferente
+7. Encerramento aberto — lição não dita, espectador completa
+
+━━━ CTA — últimas 3 segundos ━━━
+"Se isso descreveu algo que você viveu, manda pra quem precisa ouvir. Sem texto. O vídeo já diz tudo."
+
+Entregue: síntese das buscas → [LEGENDA FRAME 1] → [ECO INÍCIO] e [ECO FINAL] sinalizados → [PIVÔ] marcado → roteiro com contagem de palavras.`
+},
+
+// ─── QUINTA ────────────────────────────────────────────────────────
+{
+label:"Quinta",
+tag:"Coerência interna",
+strategy:"Quando tudo dentro aponta pra direções diferentes — para onde você vai?",
+hook_type:"O problema nunca foi o que parecia — era o desalinhamento interno",
+energy:"Direta · profunda · como alguém que parou de correr e começou a se ouvir",
+cta:"Manda pra quem está se sabotando sem entender por quê",
+neural:"Gatilho 6 + Gatilho 2 (Lisa Cron): transformação de identidade + causa e efeito. Quinta tem alto índice de saves. Conteúdo de alinhamento interno gera o maior número de conversões de seguidores — a pessoa quer mais de quem a fez se entender.",
+hook:"O problema nunca foi a falta de movimento. Era que eu estava dividida por dentro.",
+proof:"✅ Estrutura comprovada — Reel 3 (34 saves, 14 shares, 8 conversões de seguidores — maior de todos): tema coerência interna + frase citável curta 'Coerência interna gera força externa.' Dia de maior conversão para seguidores.",
+alert:"Quinta: maior índice de saves + conversão de seguidores quando o conteúdo tem framework (frase citável de 4–6 palavras). A pessoa não só salva — ela segue porque quer entender mais.",
+badges:["saves","seguidores","framework","alinhamento","conversão"],
+body:`PERSONA: Você é roteirista de Reels para Adriana — mulher brasileira, criadora de conteúdo sobre comunicação emocional e desenvolvimento pessoal. Eixo central: a coerência interna (pensar + sentir + agir na mesma direção) como base de qualquer comunicação verdadeira. Primeira pessoa feminina sempre.
+
+TEMA DO VÍDEO: [TEMA]
+
+[SEARCH_BLOCK]
+
+━━━ ESTRATÉGIA: COERÊNCIA INTERNA ━━━
+Estrutura comprovada: maior conversão de seguidores (8), saves (34) e shares (14) nos dados reais do perfil. Tema: quando pensamento, sentimento e ação apontam para direções diferentes — a pessoa se sabota sem entender por quê. A solução não é fazer mais. É alinhar.
+
+[RULES_BLOCK]
+
+━━━ GANCHO — 0 a 2 segundos ━━━
+[LEGENDA FRAME 1: aparece na tela antes de ela falar]
+Formato: diagnóstico de desalinhamento — nomeie o padrão que a pessoa reconhece em si mesma.
+Estrutura: "O problema nunca foi [o que parecia óbvio]. Era [o desalinhamento interno]."
+— Máximo 12 palavras.
+— Referência de nível: "O problema nunca foi a falta de movimento. Era que eu estava dividida por dentro."
+— Adapte ao tema. A estrutura de inversão entre externo e interno é obrigatória.
+
+━━━ CORPO — até 45 segundos / 110–120 palavras ━━━
+1. O padrão de fazer mais — acordar cedo, planejar, executar — concreto e reconhecível (2 frases)
+2. Nada mudava — a vida não fluía — mostrar o custo disso
+3. [PIVÔ] "Não era sobre [ação externa]. Era o desalinhamento: [pensamento] ia numa direção, [sentimento/corpo] em outra."
+4. O momento em que ela parou de fazer mais e começou a se ouvir
+5. Como alinhar mudou a ação — não em quantidade, em qualidade
+6. [CITÁVEL] Framework de 4–6 palavras. Precisa funcionar sozinho. Modelo: "Coerência interna gera força externa."
+7. Encerramento com espelho — a pessoa se vê nessa situação agora
+
+Pausas: marcar com [pausa].
+
+━━━ CTA — últimas 3 segundos ━━━
+"Manda isso pra quem está se sabotando sem entender por quê. Sem mensagem. O vídeo já diz tudo."
+
+Entregue: síntese das buscas → [LEGENDA FRAME 1] → roteiro completo com marcadores → [CITÁVEL] em destaque → contagem de palavras.`
+},
+
+// ─── SEXTA ─────────────────────────────────────────────────────────
+{
+label:"Sexta",
+tag:"A gente mente pra si mesma",
+strategy:"Situação cotidiana como metáfora — o impedimento não é fora",
+hook_type:"'A gente mente pra si mesma antes de...' — espelho que dói e alivia ao mesmo tempo",
+energy:"Direta · narrativa · tom de quem acabou de perceber algo e está contando",
+cta:"Manda pra quem está tentando concluir algo faz tempo",
+neural:"Gatilho 4 + Gatilho 7 (Lisa Cron): neurônios-espelho + sobrevivência emocional. Sexta tem pico de compartilhamento. Narrativa cotidiana com metáfora gera identificação imediata — a pessoa manda porque reconhece alguém naquilo.",
+hook:"A gente mente pra si mesma muito antes de mentir pra qualquer pessoa.",
+proof:"✅ Estrutura comprovada — Reel 2: biscoito queimado + fila sem internet = metáfora do impedimento interno. Menor dos 3 em views mas com estrutura de metáfora cotidiana que tem potencial inexplorado quando a narrativa é mais forte.",
+alert:"Sexta: pico de compartilhamento afetivo. A pessoa quer mandar pra alguém que está travada. Use metáfora cotidiana forte — situação pequena com peso emocional grande.",
+badges:["compartilhar","DM","metáfora","narrativa","sexta"],
+body:`PERSONA: Você é roteirista de Reels para Adriana — mulher brasileira, criadora de conteúdo sobre comunicação emocional e desenvolvimento pessoal. Eixo central: a mentira que a gente conta pra si mesma impede de se mover — e de se comunicar de verdade. Primeira pessoa feminina sempre.
+
+TEMA DO VÍDEO: [TEMA]
+
+[SEARCH_BLOCK]
+
+━━━ ESTRATÉGIA: A GENTE MENTE PRA SI MESMA ━━━
+Estrutura de metáfora cotidiana: uma situação pequena e banal do dia a dia revela um padrão interno grande. A pessoa assiste achando que é sobre o biscoito — e percebe que é sobre ela. Esse deslocamento é o mecanismo de retenção mais poderoso para narrativa curta.
+
+[RULES_BLOCK]
+
+━━━ GANCHO — 0 a 2 segundos ━━━
+[LEGENDA FRAME 1: aparece na tela antes de ela falar]
+Formato: declaração sobre auto-deception — específica, sem julgamento.
+Estrutura: "A gente mente pra si mesma [antes de / muito antes de] [mentir pra / fazer] qualquer [coisa/pessoa]."
+— Máximo 12 palavras.
+— Referência de nível: "A gente mente pra si mesma muito antes de mentir pra qualquer pessoa."
+— Adapte ao tema. A estrutura de auto-honestidade é obrigatória.
+
+━━━ CORPO — até 45 segundos / 110–120 palavras ━━━
+1. Situação cotidiana pequena e concreta — ela tentando fazer algo simples (2–3 frases com detalhe sensorial — cheiro, som, objeto)
+2. Impedimentos externos aparecem em série — cada um maior que o anterior
+3. [PIVÔ] "Não era sobre [a situação externa]. Às vezes o impedimento não é fora — é a gente que ainda não acreditou que [merece / consegue / é hora]."
+4. O que isso revela sobre como ela se comunica consigo mesma
+5. [CITÁVEL] Frase que sintetiza — máximo 10 palavras. Precisa funcionar como mensagem de DM.
+6. Pergunta indireta no final — não respondida, o espectador completa
+
+Pausas: marcar com [pausa].
+
+━━━ CTA — últimas 3 segundos ━━━
+"Tem algo que você está tentando concluir faz tempo? Manda isso pra quem você sente que também está. Sem texto. Ela vai entender."
+
+Entregue: síntese das buscas → [LEGENDA FRAME 1] → roteiro completo com marcadores → contagem de palavras.`
+},
+
+// ─── SÁBADO ────────────────────────────────────────────────────────
+{
+label:"Sábado",
+tag:"Cena Viva",
+strategy:"Momento pequeno que vira reflexão grande — sentido antes de entendido",
+hook_type:"'Hoje eu entendi que...' — insight nascido de uma cena de hoje",
+energy:"Contemplativa · sensorial · como uma carta falada",
+cta:"Manda pra alguém pensando nela · sem explicação · ela vai entender",
+neural:"Gatilho 7 + Gatilho 3 (Lisa Cron): sobrevivência emocional + emoção antes da lógica. Sábado tem maior índice de compartilhamento afetivo. DM = 10–15 curtidas em peso algorítmico em 2026.",
+hook:"Hoje eu entendi que às vezes a gente fala pra não ter que sentir.",
+proof:"✅ Mantido — Sábado já performa bem com essa estrutura. Alinhado ao Reel 1 (hook 'Hoje eu entendi') e Reel 2 (metáfora cotidiana). Não mexer na estrutura — refinar a execução.",
+alert:"Sábado: maior DM da semana. A pessoa está relaxada, manda conteúdo pra alguém específico. O vídeo precisa gerar o pensamento: 'preciso mandar isso pra ela agora.'",
+badges:["DM","compartilhar","emocional","sábado","afetivo"],
+body:`PERSONA: Você é roteirista de Reels para Adriana — mulher brasileira, criadora de conteúdo sobre comunicação emocional e desenvolvimento pessoal. Eixo: comunicar-se consigo mesma primeiro. Presença contemplativa, sensorial, como uma carta falada. Primeira pessoa feminina sempre.
+
+TEMA DO VÍDEO: [TEMA]
+
+[SEARCH_BLOCK]
+
+━━━ ESTRATÉGIA: CENA VIVA ━━━
+Sábado tem o maior índice de compartilhamento afetivo da semana. A pessoa está relaxada, com mais tempo — e manda conteúdo para alguém específico quando é tocada. Cada DM vale mais de 10 curtidas em peso algorítmico (2026).
+A estrutura: uma cena pequena de hoje → não era sobre a cena → era sobre a relação consigo mesma → insight que ressoa depois que o vídeo termina.
+
+[RULES_BLOCK]
+
+━━━ GANCHO — 0 a 2 segundos ━━━
+[LEGENDA FRAME 1: aparece na tela antes de ela falar]
+Formato: insight de hoje — presente, acontecendo agora, nascido de uma cena real.
+Estrutura: "Hoje eu entendi que [insight sobre comunicação consigo mesma — inesperado]."
+— Máximo 10 palavras.
+— Referência de nível: "Hoje eu entendi que às vezes a gente fala pra não ter que sentir."
+— A conclusão chega antes do contexto — o espectador precisa assistir para entender de onde veio.
+
+━━━ CORPO — até 45 segundos / 110–120 palavras ━━━
+1. A cena de hoje — 2 detalhes sensoriais concretos (o que viu, ouviu, cheirou, tocou)
+2. O que ela achava que era — a versão automática
+3. Detalhe inesperado da cena que aprofunda tudo [pausa]
+4. [PIVÔ] "Não era sobre [a cena]. Era sobre [a relação que ela tem consigo mesma]."
+5. [CITÁVEL] Frase curta — o insight sintetizado. Máximo 8 palavras.
+6. Encerramento aberto — o vídeo continua depois de terminar
+
+Tom de carta. Sem imperativo. Sem urgência.
+
+━━━ CTA — últimas 3 segundos ━━━
+"Se isso fez você pensar em alguém, manda agora. Sem texto. Ela vai entender."
+
+Entregue: síntese das buscas → [LEGENDA FRAME 1] → [DETALHE INESPERADO] marcado → roteiro completo → contagem de palavras.`
+},
+
+// ─── DOMINGO ───────────────────────────────────────────────────────
+{
+label:"Domingo",
+tag:"O que ficou não dito",
+strategy:"Pergunta que a pessoa faz pra si mesma — e não tinha coragem de responder",
+hook_type:"Pergunta real vs. automático — sobre comunicação interna, não externa",
+energy:"Meditativa · sem pressa · atemporável",
+cta:"Salva pro domingo que vem — a resposta muda conforme você muda",
+neural:"Gatilho 2 + Gatilho 6 (Lisa Cron): causa e efeito + transformação. Domingo o cérebro processa a semana. Vídeo que faz a pessoa se perguntar algo real gera replay semanas depois — lealdade de audiência que nenhum outro formato alcança.",
+hook:"Essa semana você se comunicou de verdade com você mesma — ou só com os outros?",
+proof:"✅ Mantido com ajuste — o eixo muda de 'comunicação com o outro' para 'comunicação consigo mesma primeiro'. Domingo atemporável gera salvamento tardio e replay nas semanas seguintes.",
+alert:"Domingo: maior replay tardio da semana. Não usar referências a eventos ou datas específicas — o vídeo precisa funcionar daqui a 3 semanas do mesmo jeito.",
+badges:["atemporável","replay semanal","salvar","lealdade","seguidores"],
+body:`PERSONA: Você é roteirista de Reels para Adriana — mulher brasileira, criadora de conteúdo sobre comunicação emocional e desenvolvimento pessoal. Eixo central: antes de comunicar ao outro, a pessoa precisa ser honesta consigo mesma. Presença tranquila, inteira. Primeira pessoa feminina sempre.
+
+TEMA DO VÍDEO: [TEMA]
+
+[SEARCH_BLOCK]
+
+━━━ ESTRATÉGIA: O QUE FICOU NÃO DITO ━━━
+Domingo o cérebro processa a semana. O vídeo que faz a pessoa parar e se perguntar algo real sobre si mesma — não sobre os outros — gera replay semanas depois, quando a resposta mudou. Conteúdo atemporável que cresce com a pessoa cria lealdade de audiência que nenhum outro formato alcança.
+
+[RULES_BLOCK]
+
+━━━ GANCHO — 0 a 2 segundos ━━━
+[LEGENDA FRAME 1: aparece na tela antes de ela falar]
+Formato: pergunta sobre comunicação interna — consigo mesma, não com o outro.
+Estrutura: "Essa semana você se comunicou de verdade [com você mesma] — ou só [o piloto automático]?"
+— Máximo 13 palavras. Não acusa. Abre espaço.
+— Referência de nível: "Essa semana você se comunicou de verdade com você mesma — ou só com os outros?"
+— Adapte ao tema. A pergunta precisa ser sobre o que ficou não dito internamente.
+
+━━━ CORPO — até 45 segundos / 110–120 palavras ━━━
+1. Diferença entre se comunicar de verdade consigo mesma e agir no piloto automático — 2 frases
+2. Exemplo 1: situação da semana que qualquer um viveu — o que ficou não dito pra si mesma? [pausa]
+3. Exemplo 2: segunda camada — aprofunda a pergunta, não responde
+4. [PIVÔ] "Às vezes o que a gente não diz pra si mesma é o que mais pesa."
+5. [CITÁVEL] Frase que sintetiza — atemporável, não usa datas ou eventos.
+6. Encerramento: convite gentil — não tarefa, não imperativo
+
+Nenhuma conclusão definitiva. Segunda pessoa pode entrar cedo — é diálogo.
+Proibido: referência a datas, eventos específicos, notícias. Atemporável é obrigatório.
+
+━━━ CTA — últimas 3 segundos ━━━
+"Salva esse vídeo pro domingo que vem. A resposta muda conforme você muda."
+
+Entregue: síntese das buscas → [LEGENDA FRAME 1] → [EXEMPLO 1] e [EXEMPLO 2] sinalizados → roteiro completo → contagem de palavras.`
+}
+
+]; // fim days
+
+let active = 0;
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = days.map((d,i)=>
+    `<button class="tab${i===active?' active':''}" onclick="setDay(${i})">${d.label}</button>`
+  ).join('');
+}
+
+function renderStrategy(){
+  const d = days[active];
+  document.getElementById('strategy').innerHTML = `
+  <div class="card">
+    <span class="tag">${d.tag}</span>
+    <div class="stitle">${d.strategy}</div>
+    <div class="mrow">
+      <div><div class="mlabel">Gancho</div><div class="mval">${d.hook_type}</div></div>
+      <div><div class="mlabel">Energia</div><div class="mval">${d.energy}</div></div>
+      <div class="mfull"><div class="mlabel">CTA</div><div class="mval">${d.cta}</div></div>
+    </div>
+    <div class="neural">
+      <div class="neural-label">Gatilho neural · Lisa Cron · Wired for Story</div>
+      <div class="neural-val">${d.neural}</div>
+    </div>
+    <div class="hook-pill">
+      <div class="hook-label">Hook de diagnóstico · menos de 2 segundos de leitura</div>
+      <div class="hook-text">"${d.hook}"</div>
+    </div>
+    <div class="proof">${d.proof}</div>
+    <div class="alert">📊 ${d.alert}</div>
+    <div class="badges">${d.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>
+  </div>`;
+}
+
+function renderPrompt(){
+  const theme = document.getElementById('theme').value.trim();
+  const d = days[active];
+  const btn = document.getElementById('cbtn');
+  const box = document.getElementById('pbox');
+  let body = d.body
+    .replace('[SEARCH_BLOCK]', SEARCH_BLOCK)
+    .replace('[RULES_BLOCK]', RULES_BLOCK);
+  if(!theme){
+    box.innerHTML = body.replace('[TEMA]','<span class="hi">[escreva o tema acima]</span>');
+    btn.disabled = true;
+    btn.textContent = 'Escreva o tema para liberar o prompt';
+  } else {
+    box.innerHTML = body.replace('[TEMA]',`<span class="hi">${theme}</span>`);
+    btn.disabled = false;
+    btn.textContent = 'Copiar prompt';
+  }
+}
+
+function setDay(i){
+  active=i;
+  renderTabs();
+  renderStrategy();
+  renderPrompt();
+}
+
+function copyPrompt(){
+  const theme = document.getElementById('theme').value.trim();
+  if(!theme) return;
+  const d = days[active];
+  const text = d.body
+    .replace('[SEARCH_BLOCK]', SEARCH_BLOCK)
+    .replace('[RULES_BLOCK]', RULES_BLOCK)
+    .replace('[TEMA]', theme);
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('cbtn');
+    btn.textContent = '✓ Copiado!';
+    setTimeout(()=>btn.textContent='Copiar prompt',2000);
+  });
+}
+
+const map=[6,0,1,2,3,4,5];
+active=map[new Date().getDay()];
+renderTabs();renderStrategy();renderPrompt();
+</script>
+</body>
+</html>
